@@ -40,10 +40,31 @@ export default {
         device_name: this.device_name
       })
       .then(response => {
-        console.log(response)
+        //console.log(response)
+        if(response.data.token){
+          //login com sucesso
+          console.log("login com sucesso")
+          sessionStorage.setItem('usuario',JSON.stringify(response.data));
+          this.$router.push('/');
+        }else if(response.status == 404){
+          //Login não existe
+          console.log(response.status);
+          alert("Login Inválido!!");
+        }else{
+          //Erros de validação
+          console.log("Erros de validação");
+          let erros = '';
+          //transforma objeto em array de valores
+          for(let erro of Object.values(response.data)){
+            erros += erro+" ";
+          }
+          alert(erros);
+        }
       })
       .catch(e => {
-        console.log(e)})
+        console.log(e)
+        alert("Servidor fora do ar!");
+      })
     }
   }
 }

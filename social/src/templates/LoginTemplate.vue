@@ -2,9 +2,10 @@
   <span>
     <header>
       <navbar logo="Projetos a la Carte" url="/" cor="teal darken-4">
-        <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/cadastro">Cadastre-se</router-link></li>
-        <li><router-link to="/login">Entrar</router-link></li>
+        <li v-if="!usuario"><router-link to="/login">Entrar</router-link></li>
+        <li v-if="!usuario"><router-link to="/cadastro">Cadastre-se</router-link></li>
+        <li v-if="usuario"><router-link to="/perfil">{{usuario.name}}</router-link></li>
+        <li v-if="usuario"><a v-on:click="sair()">Sair</a></li>
       </navbar>
     </header>
     
@@ -39,14 +40,32 @@ import footervue from '@/components/layouts/footer/footervue'
 import gridvue from '@/components/layouts/gridvue/gridvue'
 import CardMenuVue from '@/components/layouts/cardmenuvue/CardMenuVue'
 
-export default {
-  
+export default {  
   name: 'LoginTemplate',
+  data(){
+    return {
+      usuario: false
+    }
+  },
   components:{
     navbar, 
     footervue, 
     gridvue,
     CardMenuVue,
+  },
+  created(){
+    console.log('created()');
+    let usuarioAux = sessionStorage.getItem('usuario');
+    if (usuarioAux) {
+      this.usuario = JSON.parse(usuarioAux);
+      this.$router.push('/');
+    }
+  },
+  methods:{
+    sair(){
+      sessionStorage.clear();
+      this.usuario = false;
+    }
   }
 }
 </script>
