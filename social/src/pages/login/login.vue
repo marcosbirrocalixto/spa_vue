@@ -33,8 +33,12 @@ export default {
   },
   methods:{
     login(){
-      console.log("ok"),
-      axios.get('http://projetosalacarte.local/api/')
+      console.log("ok");
+      axios.post(`http://projetosalacarte.local/api/sanctum/token`, {
+        email: this.email,
+        password: this.password,
+        device_name: this.device_name
+      })
       .then(response => {
         console.log(response)
       })
